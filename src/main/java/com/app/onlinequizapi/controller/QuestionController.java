@@ -19,11 +19,7 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
-        Question createdQuestion = questionService.createQuestion(question);
-        return ResponseEntity.status(201).body(createdQuestion);
-    }
+
 
     @GetMapping
     public ResponseEntity<List<Question>> getAllQuestions() {
@@ -38,9 +34,4 @@ public class QuestionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
-        questionService.deleteQuestion(id);
-        return ResponseEntity.noContent().build();
-    }
 }

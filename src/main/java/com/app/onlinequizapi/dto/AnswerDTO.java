@@ -10,7 +10,7 @@ public class AnswerDTO {
     @NotNull(message="Question ID cannot be null")
     private Long questionId;
 
-//    @NotNull(message="Selected option ID cannot be null")
+    @NotNull(message="Selected option ID's cannot be null")
     private List<Long> selectedOptionId;
 
     public Long getQuestionId() {

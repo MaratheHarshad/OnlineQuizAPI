@@ -41,9 +41,6 @@ public class QuizController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteQuiz(@PathVariable Long id) {
         quizService.deleteQuiz(id);

@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/quiz-take")
+@RequestMapping("/api/quiz")
 public class QuizTakingController {
 
     private final QuizService quizService;
@@ -52,27 +52,7 @@ public class QuizTakingController {
         return ResponseEntity.ok(quizDTO);
     }
 
-    @GetMapping("/{quizId}/random-question")
-    public ResponseEntity<Question> getRandomQuestion(@PathVariable Long quizId) {
-        Optional<Quiz> quizOptional = quizService.getQuizById(quizId);
-        if (quizOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        Quiz quiz = quizOptional.get();
-        List<Question> questions = quiz.getQuestions();
-        if (questions.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        Random random = new Random();
-        Question randomQuestion = questions.get(random.nextInt(questions.size()));
-
-        // Optional: remove or hide correct flags before returning for quiz-taking
-        randomQuestion.getOptions().forEach(option -> option.setCorrect(false));
-
-        return ResponseEntity.ok(randomQuestion);
-    }
-
-    @PatchMapping("/{quizId}/add-question")
+    @PatchMapping("/{quizId}/question")
     public ResponseEntity<Quiz> addQuestionToQuiz(@PathVariable Long quizId, @RequestBody QuestionDTO questionDTO) {
         Quiz quiz = quizService.getQuizById(quizId)
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz not found with id " + quizId));
@@ -100,7 +80,7 @@ public class QuizTakingController {
         return ResponseEntity.ok(savedQuiz);
     }
 
-    @DeleteMapping("/{quizId}/delete-question/{questionId}")
+    @DeleteMapping("/{quizId}/question/{questionId}")
     public ResponseEntity<Void> deleteQuestionFromQuiz(@PathVariable Long quizId, @PathVariable Long questionId) {
         Optional<Quiz> quizOptional = quizService.getQuizById(quizId);
         if (quizOptional.isEmpty()) {
@@ -112,7 +92,7 @@ public class QuizTakingController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{quizId}/submit")
+    @PostMapping("/{quizId}")
     public ResponseEntity<ScoreDTO> submitAnswers(
             @PathVariable Long quizId,
             @RequestBody List<AnswerDTO> answers) {
